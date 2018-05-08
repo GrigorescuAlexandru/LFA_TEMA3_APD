@@ -72,7 +72,7 @@ void printResult(vector<int> &resultedStates, vector<int> &finalStates)
         cout << "Word unaccepted";
 }
 
-bool stateHasTransitionWithLambda(vector<transition> &T, int state)
+bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
 {
     int i;
 
@@ -82,7 +82,7 @@ bool stateHasTransitionWithLambda(vector<transition> &T, int state)
     return false;
 }
 
-void APD(int currentState, char word[101], vector<int> &resultedStates, stack<char> S, vector<transition> T)
+void APD(int currentState, char word[101], vector<int> &resultedStates, stack<char> S, vector<transition> &T)
 {
     int i;
     stack<char> copyS;
