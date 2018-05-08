@@ -2,6 +2,7 @@
 #include <fstream>
 #include <stack>
 #include <vector>
+#include <string.h>
 
 using namespace std;
 
@@ -52,24 +53,6 @@ bool isFinalState(vector<int> &finalStates, int x)
         if(finalStates[i] == x)
             return true;
     return false;
-}
-
-void printResult(vector<int> &resultedStates, vector<int> &finalStates)
-{
-    int i;
-    bool foundFinalState = false;
-
-    for(i = 0; i < resultedStates.size(); i++)
-        if(isFinalState(finalStates, resultedStates[i]))
-        {
-              foundFinalState = true;
-              break;
-        }
-
-    if(foundFinalState)
-        cout << "Word accepted";
-    else
-        cout << "Word unaccepted";
 }
 
 bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
@@ -131,6 +114,24 @@ void APD(int currentState, char word[101], vector<int> &resultedStates, stack<ch
         }
 }
 
+void printResult(vector<int> &resultedStates, vector<int> &finalStates)
+{
+    int i;
+    bool foundFinalState = false;
+
+    for(i = 0; i < resultedStates.size(); i++)
+        if(isFinalState(finalStates, resultedStates[i]))
+        {
+            foundFinalState = true;
+            break;
+        }
+
+    if(foundFinalState)
+        cout << "Word accepted";
+    else
+        cout << "Word unaccepted";
+}
+
 int main()
 {
     int beginState = -1;
@@ -143,7 +144,8 @@ int main()
 
     readAutomaton(beginState, finalStates, T);
 
-    cout << "Word = "; cin.get(word,100);
+    cout << "Word = ";
+    cin.get(word, 100);
 
     APD(beginState, word, resultedStates, S, T);
 
