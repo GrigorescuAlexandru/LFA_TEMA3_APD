@@ -20,7 +20,7 @@ struct transition
  */
 void readAutomaton(int &beginState, vector<int> &finalStates, vector<transition> &T)
 {
-    int i;
+    unsigned i;
     unsigned numberOfTransitions, numberOfFinalStates;
     char unusedCharacter;
     ifstream fin("..\\APD Settings.txt");
@@ -58,7 +58,7 @@ void readAutomaton(int &beginState, vector<int> &finalStates, vector<transition>
  */
 bool isFinalState(vector<int> &finalStates, int x)
 {
-    int i;
+    unsigned i;
 
     for(i = 0; i < finalStates.size(); i++)
         if(finalStates[i] == x)
@@ -74,7 +74,7 @@ bool isFinalState(vector<int> &finalStates, int x)
  */
 bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
 {
-    int i;
+    unsigned i;
 
     for(i = 0; i < T.size(); i++)
         if((state == T[i].startState) && (T[i].character == '*'))
@@ -93,7 +93,7 @@ bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
  */
 void APD(int currentState, char word[101], vector<int> &resultedStates, stack<char> S, vector<transition> &T)
 {
-    int i;
+    unsigned i;
     stack<char> copyS;
 
     copyS = S;
@@ -105,19 +105,20 @@ void APD(int currentState, char word[101], vector<int> &resultedStates, stack<ch
         else
             for(i = 0; i < T.size(); i++)
             {
-            S = copyS;
-            if((T[i].startState == currentState) && (T[i].character == '*'))
-                if( (!S.empty() && (T[i].characterNeededInStack == S.top())) || (T[i].characterNeededInStack == '*') )
-                {
-                    if(T[i].characterNeededInStack != '*')
-                        S.pop();
+                S = copyS;
+                if ((T[i].startState == currentState) && (T[i].character == '*'))
+                    if ((!S.empty() && (T[i].characterNeededInStack == S.top())) ||
+                        (T[i].characterNeededInStack == '*'))
+                    {
+                        if (T[i].characterNeededInStack != '*')
+                            S.pop();
 
-                    if(T[i].characterPushedIntoStack != '*')
-                        S.push(T[i].characterPushedIntoStack);
+                        if (T[i].characterPushedIntoStack != '*')
+                            S.push(T[i].characterPushedIntoStack);
 
-                    APD(T[i].destinationState, word, resultedStates, S, T);
-                }
-        }
+                        APD(T[i].destinationState, word, resultedStates, S, T);
+                    }
+            }
     }
     else
         for(i = 0; i < T.size(); i++)
@@ -142,7 +143,7 @@ void APD(int currentState, char word[101], vector<int> &resultedStates, stack<ch
 
 void printResult(vector<int> &resultedStates, vector<int> &finalStates)
 {
-    int i;
+    unsigned i;
     bool foundFinalState = false;
 
     for(i = 0; i < resultedStates.size(); i++)
