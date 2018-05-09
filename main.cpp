@@ -177,5 +177,6 @@ int main()
 
     printResult(resultedStates, finalStates);
 
+    cout << '\n';
     return 0;
 }
