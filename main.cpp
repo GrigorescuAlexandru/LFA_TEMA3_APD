@@ -11,7 +11,13 @@ struct transition
     char character;
     char characterNeededInStack, characterPushedIntoStack;
 };
-
+/**
+ * @brief read the automaton details from the file and create the needed arrays in memory
+ *
+ * @param beginState is an integer that represents the starting state of the APD
+ * @param finalStates is an array of integers that contains the final states
+ * @param T is an array of "struct transition" that contains all the transitions of the automaton
+ */
 void readAutomaton(int &beginState, vector<int> &finalStates, vector<transition> &T)
 {
     int i;
@@ -43,7 +49,13 @@ void readAutomaton(int &beginState, vector<int> &finalStates, vector<transition>
 
     fin.close();
 }
-
+/**
+ * @brief checks if the given state "x" is a final state
+ *
+ * @param finalStates is an array of integers that contains the final states
+ * @param x is an integer that represents the state that will be verified
+ * @return true if state "x" is a final state, else return false
+ */
 bool isFinalState(vector<int> &finalStates, int x)
 {
     int i;
@@ -53,7 +65,13 @@ bool isFinalState(vector<int> &finalStates, int x)
             return true;
     return false;
 }
-
+/**
+ * @brief checks if the given state "state" has at least a transition that doesnt read input from the given word (lambda character)
+ *
+ * @param T is an array of "struct transition" that contains all the transitions of the automaton
+ * @param state is an integer that represents the state that will be verified
+ * @return true if "state" has at least one transition with character lambda, else return false
+ */
 bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
 {
     int i;
@@ -64,6 +82,15 @@ bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
     return false;
 }
 
+/**
+ * @brief reads the input of the given word and adds all the resulted states into the array "resultedStates"
+ *
+ * @param currentState is an integer that represents the state that has been reached until now on this branch of recursive calls
+ * @param word is an array of characters that contains the words that has to be verified
+ * @param resultedStates is an array of integers that contains all the resulted states that were found until now
+ * @param S is a stack of characters that is used to implement the APD
+ * @param T is an array of "struct transition" that contains all the transitions of the automaton
+ */
 void APD(int currentState, char word[101], vector<int> &resultedStates, stack<char> S, vector<transition> &T)
 {
     int i;
