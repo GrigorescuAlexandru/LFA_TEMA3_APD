@@ -201,7 +201,7 @@ int main()
     cout << "Word = ";
     cin.get(word, 100);
 
-    S.push('$');
+    S.push('$'); // initializes the stack with z0 because the current automaton does not have any transition that initializes the stack
 
     APD(beginState, word, resultedStates, S, T);
 
