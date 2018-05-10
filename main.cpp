@@ -9,7 +9,8 @@ struct transition
 {
     int startState, destinationState;
     char character;
-    char characterNeededInStack, characterPushedIntoStack;
+    char characterNeededInStack;
+    string charactersPushedIntoStack;
 };
 /**
  * @brief read the automaton details from the file and create the needed arrays in memory
@@ -44,7 +45,7 @@ void readAutomaton(int &beginState, vector<int> &finalStates, vector<transition>
         fin >> T[i].characterNeededInStack;
         fin >> unusedCharacter;
         fin >> unusedCharacter;
-        fin >> T[i].characterPushedIntoStack;
+        fin >> T[i].charactersPushedIntoStack;
     }
 
     fin.close();
@@ -83,6 +84,32 @@ bool stateHasTransitionWithLambda(vector<transition> &T, int &state)
 }
 
 /**
+ * @brief verify if the given string is lambda (first character is '*')
+ *
+ * @param s is a string that represents the string that will be verified
+ * @return true if the string is lambda, else return false
+ */
+bool stringIsLambda(string s)
+{
+    return (s[0] == '*');
+}
+
+/**
+ * @brief push the characters of the given string into the stack one by one, starting from the end of the string
+ *        to the beginning of the string
+ *
+ * @param S is a stack of characters that is used to implement the APD
+ * @param charactersPushedIntoStack is a string whose characters will be pushed in the stack
+ */
+void pushStringCharactersIntoStack(stack<char> &S, string charactersPushedIntoStack)
+{
+    int i;
+
+    for (i = charactersPushedIntoStack.size() - 1; i >= 0; i--)
+        S.push(charactersPushedIntoStack[i]);
+}
+
+/**
  * @brief reads the input of the given word and adds all the resulted states into the array "resultedStates"
  *
  * @param currentState is an integer that represents the state that has been reached until now on this branch of recursive calls
@@ -113,8 +140,8 @@ void APD(int currentState, char word[101], vector<int> &resultedStates, stack<ch
                         if (T[i].characterNeededInStack != '*')
                             S.pop();
 
-                        if (T[i].characterPushedIntoStack != '*')
-                            S.push(T[i].characterPushedIntoStack);
+                        if (!stringIsLambda(T[i].charactersPushedIntoStack))
+                            pushStringCharactersIntoStack(S, T[i].charactersPushedIntoStack);
 
                         APD(T[i].destinationState, word, resultedStates, S, T);
                     }
@@ -130,8 +157,8 @@ void APD(int currentState, char word[101], vector<int> &resultedStates, stack<ch
                     if(T[i].characterNeededInStack != '*')
                         S.pop();
 
-                    if(T[i].characterPushedIntoStack != '*')
-                        S.push(T[i].characterPushedIntoStack);
+                    if (!stringIsLambda(T[i].charactersPushedIntoStack))
+                        pushStringCharactersIntoStack(S, T[i].charactersPushedIntoStack);
 
                     if(T[i].character != '*')
                         APD(T[i].destinationState, word + 1, resultedStates, S, T);
@@ -173,6 +200,8 @@ int main()
 
     cout << "Word = ";
     cin.get(word, 100);
+
+    S.push('$');
 
     APD(beginState, word, resultedStates, S, T);
 
